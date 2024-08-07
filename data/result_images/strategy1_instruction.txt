@@ -1,0 +1,1 @@
+Given its linear structure, the center is the optimal grasping point. The gripper should align orthogonally to its length.

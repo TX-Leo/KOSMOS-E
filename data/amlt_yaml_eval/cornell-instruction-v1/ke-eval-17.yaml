@@ -1,0 +1,58 @@
+description: ke-eval-cornell-instruction-v1
+
+target:
+  service: sing
+  name: gcrprojvc1
+  resource_group: gcr-singularity-proj1
+
+environment:
+  image: nvidia/22.10:v2
+  registry: shumingdocker.azurecr.io
+  setup:
+  - bash vl_setup.sh 
+  username: shumingdocker
+
+code:
+  local_dir: /home/shaohanhuang/kosmos-e/kosmos-e-eval/
+
+storage:
+  conversationhub:
+    storage_account_name: conversationhub
+    container_name: unilm
+  msranlp:
+    storage_account_name: msranlp
+    container_name: unilm
+  msranlpintern:
+    storage_account_name: msranlpintern
+    container_name: zhiwang
+
+jobs:
+  - name: ke-eval-cornell-instruction-v1
+    sku: 32G1
+    # mpi: true
+    command:
+    - bash mount.sh
+    - echo 'mount done'
+    - python -m torch.distributed.launch --nproc_per_node=1 eval/eval_cornell_v3.py /mnt/msranlp/shaohanh/data/tnlg_config/ 
+        --task generation_obj 
+        --path /mnt/msranlpintern/dataset/cornell-instruction-v1/dataloader/17/train_output/01/model_savedir/checkpoint_last.pt
+        --model-overrides "{'visual_pretrained':'/mnt/msranlp/shaohanh/exp/unigpt_exp/data/models/openai_clip/ViT-L-14-sd.pt', 'dict_path':'/mnt/msranlp/shumma/data/16g/dict.txt'}" 
+        --required-batch-size-multiple 1 
+        --remove-bpe=sentencepiece 
+        --max-len-b 500 
+        --add-bos-token 
+        --beam 1 
+        --buffer-size 1 
+        --image-feature-length 64 
+        --locate-special-token 1 
+        --batch-size 1 
+        --nbest 1 
+        --no-repeat-ngram-size 3 
+        --location-bin-size 32 
+        --dict-path /mnt/msranlp/shumma/data/16g/dict.txt
+    process_count_per_node: 1
+    priority: High
+    preemptible: True
+    submit_args:
+      env:
+        NCCL_TREE_THRESHOLD: 1000000 

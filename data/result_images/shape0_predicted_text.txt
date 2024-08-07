@@ -1,0 +1,1 @@
+Grasp center point coordinates: (46.0,168.0) Grasp rotation angle in radians: 1.0921943209745764

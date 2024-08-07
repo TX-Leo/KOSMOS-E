@@ -1,0 +1,45 @@
+__pycache__/
+tests/
+amlt/
+.amltignore
+.amltconfig
+
+*.egg-info
+*.pyc
+build/
+DATASET/
+OUTPUT/
+MODEL/
+output/
+*.jpg
+*.deb
+
+# compilation and distribution
+__pycache__
+_ext
+*.so
+dist/
+
+# pytorch/python/numpy formats
+*.pth
+*.pkl
+*.npy
+
+# ipython/jupyter notebooks
+*.ipynb
+**/.ipynb_checkpoints/
+
+# Editor temporaries
+*.swn
+*.swo
+*.swp
+*~
+
+# Pycharm editor settings
+.idea
+
+# vscode editor settings
+.vscode
+
+# MacOS
+.DS_Store
